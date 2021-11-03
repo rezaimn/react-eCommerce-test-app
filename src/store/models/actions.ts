@@ -1,4 +1,3 @@
-import {CounterActionTypes} from "../counter/models/actions";
-import {UserActionTypes} from "../user/models/actions";
+import {ItemActionTypes} from "../item/ItemActions";
 
-export type AppActions  = CounterActionTypes | UserActionTypes;
+export type AppActions  = ItemActionTypes;

@@ -1,12 +1,11 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {counterReducer} from './counter/CounterReducer';
-import {userReducer} from "./user/UserReducer";
+import {itemReducer} from './item/ItemReducer';
 import {createLogger} from "redux-logger";
 import thunk, {ThunkMiddleware} from "redux-thunk";
 import {AppActions} from "./models/actions";
 
 const logger = createLogger();
-export const rootReducer = combineReducers({counterReducer,userReducer})
+export const rootReducer = combineReducers({itemReducer});
 
 export type AppState = ReturnType<typeof rootReducer>
 
