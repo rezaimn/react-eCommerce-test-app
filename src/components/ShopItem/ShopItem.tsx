@@ -1,22 +1,23 @@
-import React, {ComponentPropsWithoutRef, FC} from 'react'
+import React, {ComponentPropsWithoutRef, FC, useState} from 'react'
 import {Card, Button} from 'antd';
 import ButtonGroup from 'antd/es/button/button-group';
 import {
     PlusCircleOutlined,
     MinusCircleOutlined
 } from '@ant-design/icons';
+import {Item} from '../../store/item/models/Item';
+import {useDispatch, useSelector} from 'react-redux';
+import {IState} from '../../store';
+import {ShoppingQuote} from '../../store/shopping-quote/models/ShoppingQuote';
 
 const {Meta} = Card;
 
-type plusClickCallback = () => void;
-type minusClickCallback = () => void;
+type plusClickCallback = (item: Item, shoppingQuoteData: ShoppingQuote[], dispatch: any) => void;
+type minusClickCallback = (item: Item, shoppingQuoteData: ShoppingQuote[], dispatch: any) => void;
 
 interface CommonShopItemProps {
-    id: string;
-    image: string,
-    title: string;
-    description: string;
-    price: number;
+    item: Item;
+    selectedItemsCount: number;
     onPlusClick: plusClickCallback;
     onMinusClick: minusClickCallback;
 }
@@ -26,25 +27,29 @@ export type ShopItemProps = Omit<ComponentPropsWithoutRef<'div'>,
     CommonShopItemProps;
 
 const ShopItem: FC<ShopItemProps> = ({
-                                         id,
-                                         title,
-                                         description,
-                                         image,
-                                         price,
+                                         item,
+                                         selectedItemsCount,
                                          onPlusClick,
                                          onMinusClick
-}) => {
+                                     }) => {
+    const dispatch = useDispatch();
+    const shoppingQuoteData = useSelector((state: IState) => state?.quote?.quote);
     return (
         <Card
+            className='item-card'
             hoverable
-            style={{width: 240}}
-            cover={<img alt="item-image" src={image}/>}
+            cover={<img alt="item-image" src={item.image}/>}
         >
-            <Meta title={title} description={description}/>
-            <p>{price}</p>
+            <Meta title={item.title} description={item.description}/>
+            <p>{item.price}$</p>
             <ButtonGroup>
-                <Button type="primary" onClick={onPlusClick} icon={<PlusCircleOutlined/>} size='small'/>
-                <Button type="primary" onClick={onMinusClick} icon={<MinusCircleOutlined/>} size='small'/>
+                <Button type="primary" onClick={() => onMinusClick(item,shoppingQuoteData,dispatch)} icon={<MinusCircleOutlined/>} size='small'/>
+                <span style={{
+                    padding: '0 5px',
+                    borderTop: 'solid 1px #eee',
+                    borderBottom: 'solid 1px #eee'
+                }}>{selectedItemsCount}</span>
+                <Button type="primary" onClick={() => onPlusClick(item,shoppingQuoteData,dispatch)} icon={<PlusCircleOutlined/>} size='small'/>
             </ButtonGroup>
         </Card>
     )

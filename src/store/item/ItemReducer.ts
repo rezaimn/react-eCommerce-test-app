@@ -1,13 +1,13 @@
-import {FETCH_ITEMS, ItemActionTypes} from './ItemActions';
+import {FETCHED_ITEMS, ItemActionTypes} from './ItemActions';
 
 import {Item} from './models/Item';
 import {Action, Reducer} from "redux";
 
-interface IState {
+export interface IItemsState {
     items: Item[]
 }
 
-export const initializeItemState: IState = {
+export const initializeItemState: IItemsState = {
     items: []
 }
 
@@ -15,8 +15,11 @@ export const initializeItemState: IState = {
 export const itemReducer: Reducer<Item, Action> = (state = initializeItemState, action: ItemActionTypes) => {
 
     switch (action.type) {
-        case FETCH_ITEMS: {
-            return {...state};
+        case FETCHED_ITEMS: {
+            return {
+                ...state,
+                items: action.payload
+            };
         }
         default:
             return state;

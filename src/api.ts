@@ -1,22 +1,10 @@
 import Axios from 'axios';
-import env from './constants'
 export const http = Axios.create({
-    baseURL: env.apiGateway.URL,
-    headers: { Authorization: `Bearer ${  localStorage.getItem('token')}` },
+    baseURL: 'https://codeex-test-project-default-rtdb.asia-southeast1.firebasedatabase.app/',
 });
 
-export function setHeaderToken(token: string) {
-    http.defaults.headers = { Authorization: `Bearer ${  token}` };
-}
 
-export function login(params: any): any {
-    post('login', params).then((res: any) => {
-        if (res && res.token) {
-            localStorage.setItem('token', res.token);
-            setHeaderToken(res.token);
-        }
-    });
-}
+
 
 http.interceptors.request.use(
     function (config) {

@@ -1,0 +1,10 @@
+.cart-item-count{
+    background-color: #ff1e00;
+    border-radius: 30px;
+    color: white;
+    padding-right: 5px;
+    padding-left: 5px;
+    position: relative;
+    right: 8px;
+    bottom: 8px;
+}

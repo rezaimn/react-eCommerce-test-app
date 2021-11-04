@@ -1,44 +1,22 @@
-import {FETCH_ITEMS, FETCH_ITEMS_FAILED, FETCHED_ITEMS} from './ItemActions';
-import {AppActions} from "../models/actions";
 import {Dispatch} from "redux";
-import {get} from "../../api";
+import {get, post} from "../../api";
+import {addedItem, addItemFailed, fetchedItems, fetchItemsFailed} from './ItemActions';
 import {Item} from './models/Item';
 
-
-export const fetchItems = (): AppActions => {
-    return {
-        type: FETCH_ITEMS,
-    }
-}
-
-export const fetchedItems = (items: Item[]): AppActions => {
-    return {
-        type: FETCHED_ITEMS,
-        payload: [...items]
-    }
-}
-
-export const fetchItemsFailed = (status: string): AppActions => {
-    return {
-        type: FETCH_ITEMS_FAILED,
-        payload: {status}
-    }
-}
-
-
-export const fetchItemsEpic = (url:string) => {
+export const fetchItemsEpic = (url: string) => {
     return async (dispatch: Dispatch) => {
 
         try {
-            const response = await get('');
-
-            // set account info
+            const response = await get(url);
+            const items: Item[] = Object.keys(response)?.map((key) => {
+                return response[key];
+            });
+            // set items
             if (response) {
-                dispatch(fetchedItems(response))
+                dispatch(fetchedItems(items))
             }
 
         } catch (err) {
-
             // show error
             dispatch(fetchItemsFailed('failed'))
 
@@ -47,6 +25,25 @@ export const fetchItemsEpic = (url:string) => {
     };
 };
 
+export const addItemEpic = (item: Item, url: string) => {
+    return async (dispatch: Dispatch) => {
 
-export default fetchItemsEpic;
+        try {
+            const response = await post(url, item);
+
+            // set items
+            if (response) {
+                dispatch(addedItem(item));
+            }
+
+        } catch (err) {
+
+            // show error
+            dispatch(addItemFailed('failed'))
+
+        } finally {
+        }
+    };
+};
+
 
